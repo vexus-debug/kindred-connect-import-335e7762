@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { ProtectedAdminRoute } from "@/components/admin/ProtectedAdminRoute";
@@ -142,49 +142,50 @@ const App = () => (
             <Route path="/admin/white-label" element={<AdminRoute><AdminWhiteLabel /></AdminRoute>} />
 
             {/* Clinic routes */}
-            <Route path="/clinic/:slug/dashboard" element={<ClinicRoute><DashboardHome /></ClinicRoute>} />
-            <Route path="/clinic/:slug/patients" element={<ClinicRoute><PatientsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/patients/:id" element={<ClinicRoute><PatientProfilePage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/appointments" element={<ClinicRoute><AppointmentsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/dental-charts" element={<ClinicRoute><DentalChartsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/treatments" element={<ClinicRoute><TreatmentsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/prescriptions" element={<ClinicRoute><PrescriptionsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/billing" element={<ClinicRoute><BillingPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/reports" element={<ClinicRoute><ReportsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/revenue-allocation" element={<ClinicRoute><RevenueAllocationPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/lab-work" element={<ClinicRoute><LabWorkPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/staff" element={<ClinicRoute><StaffPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/inventory" element={<ClinicRoute><InventoryPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/notifications" element={<ClinicRoute><NotificationsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/settings" element={<ClinicRoute><SettingsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/profile" element={<ClinicRoute><MyProfilePage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/tutorials" element={<ClinicRoute><TutorialsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/messages" element={<ClinicRoute><MessagesPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/reviews" element={<ClinicRoute><ReviewsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/expenses" element={<ClinicRoute><ExpensesPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/payment-plans" element={<ClinicRoute><PaymentPlansPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/estimates" element={<ClinicRoute><EstimatesPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/commissions" element={<ClinicRoute><CommissionPayoutsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/profitability" element={<ClinicRoute><ProfitabilityPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/inventory-costs" element={<ClinicRoute><InventoryCostsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/audit-log" element={<ClinicRoute><AuditLogPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/consent-forms" element={<ClinicRoute><ConsentFormsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/documents" element={<ClinicRoute><DocumentsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/automation" element={<ClinicRoute><AutomationPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/website-settings" element={<ClinicRoute><WebsiteSettingsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/waiting-list" element={<ClinicRoute><WaitingListPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/schedules" element={<ClinicRoute><SchedulesPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/suppliers" element={<ClinicRoute><SuppliersPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/purchase-orders" element={<ClinicRoute><PurchaseOrdersPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/treatment-materials" element={<ClinicRoute><TreatmentMaterialsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/analytics" element={<ClinicRoute><AdvancedAnalyticsPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/shop-management" element={<ClinicRoute><ShopManagementPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/lab" element={<ClinicRoute><LabDashboardPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/lab/cases" element={<ClinicRoute><LabCasesPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/lab/technicians" element={<ClinicRoute><LabTechniciansPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/lab/billing" element={<ClinicRoute><LabBillingPage /></ClinicRoute>} />
-            <Route path="/clinic/:slug/lab/settings" element={<ClinicRoute><LabSettingsPage /></ClinicRoute>} />
-
+            <Route path="/clinic/:slug" element={<ClinicLayout />}>
+              <Route path="dashboard" element={<DashboardHome />} />
+              <Route path="patients" element={<PatientsPage />} />
+              <Route path="patients/:id" element={<PatientProfilePage />} />
+              <Route path="appointments" element={<AppointmentsPage />} />
+              <Route path="dental-charts" element={<DentalChartsPage />} />
+              <Route path="treatments" element={<TreatmentsPage />} />
+              <Route path="prescriptions" element={<PrescriptionsPage />} />
+              <Route path="billing" element={<BillingPage />} />
+              <Route path="reports" element={<ReportsPage />} />
+              <Route path="revenue-allocation" element={<RevenueAllocationPage />} />
+              <Route path="lab-work" element={<LabWorkPage />} />
+              <Route path="staff" element={<StaffPage />} />
+              <Route path="inventory" element={<InventoryPage />} />
+              <Route path="notifications" element={<NotificationsPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+              <Route path="profile" element={<MyProfilePage />} />
+              <Route path="tutorials" element={<TutorialsPage />} />
+              <Route path="messages" element={<MessagesPage />} />
+              <Route path="reviews" element={<ReviewsPage />} />
+              <Route path="expenses" element={<ExpensesPage />} />
+              <Route path="payment-plans" element={<PaymentPlansPage />} />
+              <Route path="estimates" element={<EstimatesPage />} />
+              <Route path="commissions" element={<CommissionPayoutsPage />} />
+              <Route path="profitability" element={<ProfitabilityPage />} />
+              <Route path="inventory-costs" element={<InventoryCostsPage />} />
+              <Route path="audit-log" element={<AuditLogPage />} />
+              <Route path="consent-forms" element={<ConsentFormsPage />} />
+              <Route path="documents" element={<DocumentsPage />} />
+              <Route path="automation" element={<AutomationPage />} />
+              <Route path="website-settings" element={<WebsiteSettingsPage />} />
+              <Route path="waiting-list" element={<WaitingListPage />} />
+              <Route path="schedules" element={<SchedulesPage />} />
+              <Route path="suppliers" element={<SuppliersPage />} />
+              <Route path="purchase-orders" element={<PurchaseOrdersPage />} />
+              <Route path="treatment-materials" element={<TreatmentMaterialsPage />} />
+              <Route path="analytics" element={<AdvancedAnalyticsPage />} />
+              <Route path="shop-management" element={<ShopManagementPage />} />
+              <Route path="lab" element={<LabDashboardPage />} />
+              <Route path="lab/cases" element={<LabCasesPage />} />
+              <Route path="lab/technicians" element={<LabTechniciansPage />} />
+              <Route path="lab/billing" element={<LabBillingPage />} />
+              <Route path="lab/settings" element={<LabSettingsPage />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
