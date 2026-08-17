@@ -44,44 +44,54 @@ export function OrgProvider({ children }: { children: ReactNode }) {
 
   // Sync from URL slug
   useEffect(() => {
-    if (loading) return;
+    if (loading || !slug) return;
 
-    if (slug) {
-      // First check regular memberships
-      const membership = orgMemberships.find((m) => m.org_slug === slug);
-      if (membership) {
-        setCurrentOrg({
-          org_id: membership.org_id,
-          org_name: membership.org_name,
-          org_slug: membership.org_slug,
-          clinic_type: membership.clinic_type,
-          role: membership.role,
-        });
-      } else if (isSuperAdmin) {
-        // Super admin can access any org — fetch it directly
-        supabase
-          .from("organizations")
-          .select("id, name, slug, clinic_type")
-          .eq("slug", slug)
-          .maybeSingle()
-          .then(({ data }) => {
-            if (data) {
-              setCurrentOrg({
-                org_id: data.id,
-                org_name: data.name,
-                org_slug: data.slug,
-                clinic_type: data.clinic_type,
-                role: "owner", // super admin gets full access
-              });
-            } else {
-              navigate("/admin", { replace: true });
-            }
-          });
-      } else {
-        navigate("/select-clinic", { replace: true });
-      }
+    // Already resolved for this slug — nothing to do
+    if (currentOrg?.org_slug === slug) return;
+
+    const membership = orgMemberships.find((m) => m.org_slug === slug);
+    if (membership) {
+      setCurrentOrg({
+        org_id: membership.org_id,
+        org_name: membership.org_name,
+        org_slug: membership.org_slug,
+        clinic_type: membership.clinic_type,
+        role: membership.role,
+      });
+      return;
     }
-  }, [slug, orgMemberships, loading, isSuperAdmin, navigate]);
+
+    if (isSuperAdmin) {
+      // Super admin can access any org — fetch it directly
+      let cancelled = false;
+      supabase
+        .from("organizations")
+        .select("id, name, slug, clinic_type")
+        .eq("slug", slug)
+        .maybeSingle()
+        .then(({ data, error }) => {
+          if (cancelled) return;
+          if (data) {
+            setCurrentOrg({
+              org_id: data.id,
+              org_name: data.name,
+              org_slug: data.slug,
+              clinic_type: data.clinic_type,
+              role: "owner", // super admin gets full access
+            });
+          } else if (!error) {
+            // Slug genuinely does not exist
+            navigate("/admin", { replace: true });
+          }
+        });
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    navigate("/select-clinic", { replace: true });
+  }, [slug, orgMemberships, loading, isSuperAdmin, navigate, currentOrg?.org_slug]);
+
 
   const basePath = currentOrg ? `/clinic/${currentOrg.org_slug}` : "";
 
