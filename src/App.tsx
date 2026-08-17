@@ -82,15 +82,18 @@ import AdminWhiteLabel from "./pages/admin/AdminWhiteLabel";
 
 const queryClient = new QueryClient();
 
-function ClinicRoute({ children }: { children: React.ReactNode }) {
+function ClinicLayout() {
   return (
     <ProtectedRoute>
       <OrgProvider>
-        <DashboardLayout>{children}</DashboardLayout>
+        <DashboardLayout>
+          <Outlet />
+        </DashboardLayout>
       </OrgProvider>
     </ProtectedRoute>
   );
 }
+
 
 function AdminRoute({ children }: { children: React.ReactNode }) {
   return (
